@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from typing import cast
 
-from fastapi import APIRouter, Depends, status, HTTPException
+from fastapi import APIRouter, Depends, status, HTTPException, BackgroundTasks
 from sqlalchemy import select, delete
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -127,6 +127,11 @@ async def register_user(
             detail="An error occurred during user creation."
         ) from e
     else:
+        background_tasks.add_task(
+            email_sender.send_activation_email,
+            str(data.email),
+            login_link
+        )
         return UserRegistrationResponseSchema.model_validate(new_user)
 
 
@@ -217,6 +222,11 @@ async def activate_account(
     user.is_active = True
     await db.delete(token_record)
     await db.commit()
+    background_tasks.add_task(
+        email_sender.send_activation_complete_email,
+        str(data.email),
+        login_link
+    )
 
     return MessageResponseSchema(message="User account activated successfully.")
 
@@ -375,6 +385,11 @@ async def reset_password(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="An error occurred while resetting the password."
         )
+    background_tasks.add_task(
+        email_sender.send_password_reset_complete_email,
+        str(data.email),
+        login_link
+    )
 
     return MessageResponseSchema(message="Password reset successfully.")
 
