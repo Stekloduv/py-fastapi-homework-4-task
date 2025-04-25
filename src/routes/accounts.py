@@ -1,3 +1,4 @@
+import asyncio
 from datetime import datetime, timezone
 from typing import cast
 
@@ -131,7 +132,7 @@ async def register_user(
         ) from e
     else:
         background_tasks.add_task(
-            email_sender.send_activation_email,
+            notification.send_activation_email,
             email=new_user.email,
             activation_link="http://127.0.0.1:8000/api/v1/accounts/activate/"
         )
@@ -228,7 +229,7 @@ async def activate_account(
     await db.delete(token_record)
     await db.commit()
     background_tasks.add_task(
-        email_sender.send_activation_complete_email,
+        notification.send_activation_complete_email,
         email=new_user.email,
         login_link="http://127.0.0.1:8000/api/v1/accounts/login/"
     )
@@ -279,7 +280,7 @@ async def request_password_reset_token(
     db.add(reset_token)
     await db.commit()
     background_tasks.add_task(
-        email_sender.send_password_reset_complete_email,
+        notification.send_password_reset_complete_email,
         email=new_user.email,
         reset_link="http://127.0.0.1:8000/api/v1/accounts/reset-password/complete/"
     )
