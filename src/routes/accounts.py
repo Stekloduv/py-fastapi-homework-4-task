@@ -133,21 +133,11 @@ async def register_user(
             detail="An error occurred during user creation.",
         ) from e
     else:
-        # await notification.send_activation_email(
-        #     email=new_user.email,
-        #     activation_link=f"http://127.0.0.1:8000/api/v1/accounts/activate/"
-        # )
         background_tasks.add_task(
             notification.send_activation_email,
             email=new_user.email,
-            activation_link="http://127.0.0.1:8000/api/v1/accounts/activate/",
+            activation_link="http://127.0.0.1/api/v1/accounts/activate/",
         )
-        # asyncio.create_task(
-        #     notification.send_activation_email(
-        #         email=new_user.email,
-        #         activation_link=f"http://127.0.0.1:8000/api/v1/accounts/activate/"
-        #     )
-        # )
         return UserRegistrationResponseSchema.model_validate(new_user)
 
 

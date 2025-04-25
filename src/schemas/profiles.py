@@ -21,9 +21,11 @@ class ProfileRequestSchema(BaseModel):
     gender: Annotated[Optional[str], AfterValidator(validate_gender)] = None
     date_of_birth: Annotated[Optional[date], AfterValidator(validate_birth_date)] = None
     info: Annotated[Optional[str], AfterValidator(validate_info)] = None
+    # avatar: Optional[UploadFile]
     avatar: Annotated[Optional[UploadFile], AfterValidator(validate_image), File()] = (
         None
     )
+
 
 
 class ProfileResponseSchema(BaseModel):
@@ -37,3 +39,4 @@ class ProfileResponseSchema(BaseModel):
     avatar: str | None
 
     model_config = {"from_attributes": True}
+
