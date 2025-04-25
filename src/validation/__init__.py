@@ -3,5 +3,5 @@ from validation.profile import (
     validate_image,
     validate_gender,
     validate_birth_date,
-    validate_info
+    validate_info,
 )
