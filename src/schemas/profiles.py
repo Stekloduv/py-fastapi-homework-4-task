@@ -3,8 +3,7 @@ from typing import Annotated, Optional
 
 from fastapi import UploadFile, Form, File, HTTPException
 from pydantic import BaseModel, field_validator, HttpUrl
-from fastapi import UploadFile, File
-from pydantic import BaseModel, AfterValidator
+
 
 from validation import (
     validate_name,
