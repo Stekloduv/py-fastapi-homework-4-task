@@ -35,7 +35,6 @@ def validate_image(avatar: UploadFile) -> UploadFile:
     return avatar
 
 
-
 def validate_gender(gender: str) -> str:
     if gender not in GenderEnum.__members__.values():
         raise ValueError(

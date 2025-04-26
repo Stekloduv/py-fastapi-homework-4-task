@@ -27,7 +27,6 @@ class ProfileRequestSchema(BaseModel):
     )
 
 
-
 class ProfileResponseSchema(BaseModel):
     id: int | None
     user_id: int | None
@@ -39,4 +38,3 @@ class ProfileResponseSchema(BaseModel):
     avatar: str | None
 
     model_config = {"from_attributes": True}
-
